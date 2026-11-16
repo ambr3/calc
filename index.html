@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-bg="grid">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Scientific calculator on this device. Nothing is sent anywhere.">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Seclusa Calc">
+  <meta name="version" content="0.1.20">
+
+  <!--
+    Permissions-Policy in a <meta> tag is inert. Browsers only honour it as a
+    response header. It is here so the intent is visible next to the page that
+    needs it; the enforcement lives in _headers and .htaccess.
+  -->
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), browsing-topics=()">
+
+  <!--
+    CSP meta. Kept in step with the header by the copy in _headers and .htaccess.
+    `connect-src 'none'` is the important one: the app cannot make a network
+    request even if it wanted to. `frame-ancestors` is deliberately absent:
+    browsers ignore it inside <meta>.
+  -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; child-src 'none'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests">
+
+  <title>Seclusa Calc</title>
+
+  <script src="static/js/theme-boot.js?v=0.1.20"></script>
+  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.20">
+  <link rel="stylesheet" href="static/css/app.css?v=0.1.20">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="static/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="static/icons/icon-192.png">
+</head>
+<body>
+
+<main class="wrap">
+  <section class="calc" aria-label="Scientific calculator">
+    <header class="calc-top">
+      <div class="calc-badge">
+        <h1 class="brand"><span class="brand-mark">SECLUSA</span> CALC</h1>
+        <span class="calc-badge-model">SCI</span>
+      </div>
+      <button type="button" class="theme-btn" id="btn-theme" aria-haspopup="dialog" aria-controls="sheet-theme" aria-expanded="false">Theme</button>
+    </header>
+
+    <div class="readout" aria-live="polite">
+      <div class="readout-glass">
+        <div class="readout-meta">
+          <button type="button" class="angle-chip" id="angle-mode" aria-pressed="false" title="Cycle degrees / radians / gradians">DEG</button>
+          <span class="mem-chip" id="second-indicator" hidden>2nd</span>
+          <span class="mem-chip" id="mem-indicator" hidden>M</span>
+        </div>
+        <div class="expr" id="expr"></div>
+        <div class="display" id="display">0</div>
+      </div>
+    </div>
+
+    <div class="keypad" id="keypad" role="group" aria-label="Calculator keys">
+      <!-- row: shift + memory + angle -->
+      <button type="button" class="key key-shift" data-key="2nd" aria-pressed="false">2nd</button>
+      <button type="button" class="key key-fn" data-key="DRG"><span class="k-main">DRG</span></button>
+      <button type="button" class="key key-fn" data-key="MC">MC</button>
+      <button type="button" class="key key-fn" data-key="MR">MR</button>
+      <button type="button" class="key key-fn" data-key="M-">M−</button>
+      <button type="button" class="key key-fn" data-key="M+">M+</button>
+
+      <!-- trig / inverse -->
+      <button type="button" class="key key-fn" data-key="sin"><span class="k-main">sin</span><span class="k-alt">asin</span></button>
+      <button type="button" class="key key-fn" data-key="cos"><span class="k-main">cos</span><span class="k-alt">acos</span></button>
+      <button type="button" class="key key-fn" data-key="tan"><span class="k-main">tan</span><span class="k-alt">atan</span></button>
+      <button type="button" class="key key-fn" data-key="cot"><span class="k-main">cot</span><span class="k-alt">sec</span></button>
+      <button type="button" class="key key-fn" data-key="csc"><span class="k-main">csc</span><span class="k-alt">atan2</span></button>
+      <button type="button" class="key key-fn" data-key="ln"><span class="k-main">ln</span><span class="k-alt">eˣ</span></button>
+
+      <!-- hyperbolic / logs / roots -->
+      <button type="button" class="key key-fn" data-key="sinh"><span class="k-main">sinh</span><span class="k-alt">asinh</span></button>
+      <button type="button" class="key key-fn" data-key="cosh"><span class="k-main">cosh</span><span class="k-alt">acosh</span></button>
+      <button type="button" class="key key-fn" data-key="tanh"><span class="k-main">tanh</span><span class="k-alt">atanh</span></button>
+      <button type="button" class="key key-fn" data-key="log"><span class="k-main">log</span><span class="k-alt">10ˣ</span></button>
+      <button type="button" class="key key-fn" data-key="log2"><span class="k-main">log₂</span><span class="k-alt">2ˣ</span></button>
+      <button type="button" class="key key-fn" data-key="sqrt"><span class="k-main">√</span><span class="k-alt">∛</span></button>
+
+      <!-- powers / constants / grouping -->
+      <button type="button" class="key key-fn" data-key="x^y"><span class="k-main">xʸ</span><span class="k-alt">ʸ√x</span></button>
+      <button type="button" class="key key-fn" data-key="x²"><span class="k-main">x²</span><span class="k-alt">x³</span></button>
+      <button type="button" class="key key-fn" data-key="π"><span class="k-main">π</span><span class="k-alt">φ</span></button>
+      <button type="button" class="key key-fn" data-key="e"><span class="k-main">e</span><span class="k-alt">rand</span></button>
+      <button type="button" class="key key-fn" data-key="("><span class="k-main">(</span><span class="k-alt">,</span></button>
+      <button type="button" class="key key-fn" data-key=")"><span class="k-main">)</span><span class="k-alt">|x|</span></button>
+
+      <!-- combinatorics / clear -->
+      <button type="button" class="key key-fn" data-key="!"><span class="k-main">n!</span><span class="k-alt">nPr</span></button>
+      <button type="button" class="key key-fn" data-key="ncr"><span class="k-main">nCr</span><span class="k-alt">nPr</span></button>
+      <button type="button" class="key key-fn" data-key="floor"><span class="k-main">floor</span><span class="k-alt">round</span></button>
+      <button type="button" class="key key-fn" data-key="ceil"><span class="k-main">ceil</span><span class="k-alt">trunc</span></button>
+      <button type="button" class="key key-warn" data-key="AC">AC</button>
+      <button type="button" class="key key-warn" data-key="C">⌫</button>
+
+      <!-- ops + extras -->
+      <button type="button" class="key key-fn" data-key="±"><span class="k-main">±</span><span class="k-alt">EE</span></button>
+      <button type="button" class="key key-op" data-key="%"><span class="k-main">%</span><span class="k-alt">frac</span></button>
+      <button type="button" class="key key-fn" data-key="1/x"><span class="k-main">1/x</span><span class="k-alt">sign</span></button>
+      <button type="button" class="key key-op" data-key="÷">÷</button>
+      <button type="button" class="key key-fn" data-key="logb">logᵇ</button>
+      <button type="button" class="key key-fn" data-key="hypot">hypot</button>
+
+      <button type="button" class="key" data-key="7">7</button>
+      <button type="button" class="key" data-key="8">8</button>
+      <button type="button" class="key" data-key="9">9</button>
+      <button type="button" class="key key-op" data-key="×">×</button>
+      <button type="button" class="key key-fn" data-key="gcd">gcd</button>
+      <button type="button" class="key key-fn" data-key="lcm">lcm</button>
+
+      <button type="button" class="key" data-key="4">4</button>
+      <button type="button" class="key" data-key="5">5</button>
+      <button type="button" class="key" data-key="6">6</button>
+      <button type="button" class="key key-op" data-key="-">−</button>
+      <button type="button" class="key key-fn" data-key="min">min</button>
+      <button type="button" class="key key-fn" data-key="max">max</button>
+
+      <button type="button" class="key" data-key="1">1</button>
+      <button type="button" class="key" data-key="2">2</button>
+      <button type="button" class="key" data-key="3">3</button>
+      <button type="button" class="key key-op" data-key="+">+</button>
+      <button type="button" class="key key-fn" data-key="ans"><span class="k-main">Ans</span><span class="k-alt">deg</span></button>
+      <button type="button" class="key key-eq" data-key="=">=</button>
+
+      <button type="button" class="key key-zero" data-key="0">0</button>
+      <button type="button" class="key" data-key=".">.</button>
+      <button type="button" class="key key-fn" data-key="EE">EE</button>
+      <button type="button" class="key key-fn" data-key="rad">rad</button>
+      <button type="button" class="key key-fn" data-key="grad">→grad</button>
+      <button type="button" class="key key-fn" data-key="frac">frac</button>
+    </div>
+
+    <footer class="calc-foot">
+      <p>
+        <a href="LICENSE">GPL-3.0</a>
+        · Made with <span class="heart" role="img" aria-label="love">❤️</span> 🇬🇧
+      </p>
+    </footer>
+  </section>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="sheet" id="sheet-theme" role="dialog" aria-modal="false" aria-label="Theme" aria-hidden="true" inert>
+  <div class="sheet-handle" aria-hidden="true"></div>
+  <h3>Theme</h3>
+  <p class="note">Mode</p>
+  <div class="theme-mode-row" role="radiogroup" aria-label="Colour mode">
+    <button type="button" class="theme-chip" data-theme-opt="system" role="radio" aria-checked="false">System</button>
+    <button type="button" class="theme-chip" data-theme-opt="light" role="radio" aria-checked="false">Light</button>
+    <button type="button" class="theme-chip" data-theme-opt="dark" role="radio" aria-checked="false">Dark</button>
+  </div>
+  <p class="note">Orange ruled lines stay on. Solid colour skies are not used here.</p>
+  <p class="note">On this device</p>
+  <div class="theme-mode-row">
+    <button type="button" class="btn" id="btn-clear">Clear saved data</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="static/js/store.js?v=0.1.20"></script>
+<script src="static/js/theme.js?v=0.1.20"></script>
+<script src="static/js/calc.js?v=0.1.20"></script>
+<script src="static/js/app.js?v=0.1.20"></script>
+</body>
+</html>

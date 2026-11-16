@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Seclusa Calc">
+  <rect width="1024" height="1024" rx="200" fill="#0a0a0a"/>
+  <rect x="184" y="184" width="656" height="656" rx="82" fill="#ffffff"/>
+  <rect x="286" y="286" width="452" height="144" rx="30" fill="#0a0a0a"/>
+  <rect x="307" y="492" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="457" y="492" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="607" y="492" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="307" y="612" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="457" y="612" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="607" y="612" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="307" y="732" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="457" y="732" width="110" height="90" rx="18" fill="#0a0a0a"/>
+  <rect x="607" y="732" width="110" height="90" rx="18" fill="#0a0a0a"/>
+</svg>

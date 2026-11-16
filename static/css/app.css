@@ -1,0 +1,592 @@
+/*
+ * Seclusa Calc — full-viewport calculator body.
+ * Palette tokens live in seclusa-base.css. Orange accents use --warm.
+ */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--warm); outline-offset: 2px; }
+
+/* ------------------------------------------------------------------ page */
+
+.wrap {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding:
+    env(safe-area-inset-top, 0px)
+    env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+
+/* ---------------------------------------------------------- calc chassis */
+
+.calc {
+  --calc-shell: #d8d6d2;
+  --calc-shell-deep: #b8b5b0;
+  --calc-shell-edge: #9a9792;
+  --calc-inset: #c4c1bc;
+  --calc-lcd: #9aaa8e;
+  --calc-lcd-ink: #1a2a18;
+  --calc-lcd-dim: #3d4f38;
+  --calc-lcd-frame: #6a6864;
+  --key-digit: #f4f2ee;
+  --key-digit-edge: #c8c4bc;
+  --key-digit-ink: #1a1a1a;
+  --key-fn: #5c5a58;
+  --key-fn-edge: #3a3836;
+  --key-fn-ink: #f0eeea;
+  --key-op: #c45e12;
+  --key-op-edge: #8a400c;
+  --key-op-ink: #fff8f2;
+  --key-warn: #a83a2e;
+  --key-warn-edge: #6e241c;
+  --key-warn-ink: #fff5f3;
+  --key-eq: #1f1e1c;
+  --key-eq-edge: #000;
+  --key-eq-ink: #f5f3ef;
+  --key-shift: #2f5f8a;
+  --key-shift-edge: #1a3a58;
+  --key-shift-ink: #f2f7fc;
+  --calc-foot-ink: #5c5955;
+
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 100%;
+  padding: 8px 6px 2px;
+  border-radius: 0;
+  background:
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--calc-shell) 92%, #fff) 0%,
+      var(--calc-shell) 42%,
+      var(--calc-shell-deep) 100%);
+  border: none;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 45%, transparent) inset,
+    0 -2px 4px color-mix(in srgb, #000 12%, transparent) inset;
+}
+
+.calc::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, #000 10%, transparent);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px color-mix(in srgb, #fff 22%, transparent);
+}
+
+html[data-theme="dark"] .calc {
+  --calc-shell: #2a2a2a;
+  --calc-shell-deep: #1a1a1a;
+  --calc-shell-edge: #0a0a0a;
+  --calc-inset: #1f1f1f;
+  --calc-lcd: #6f7f62;
+  --calc-lcd-ink: #0e160c;
+  --calc-lcd-dim: #24301f;
+  --calc-lcd-frame: #111;
+  --key-digit: #3a3a3a;
+  --key-digit-edge: #151515;
+  --key-digit-ink: #f2f2f2;
+  --key-fn: #4a4846;
+  --key-fn-edge: #1c1b1a;
+  --key-fn-ink: #e8e6e2;
+  --key-op: #c45e12;
+  --key-op-edge: #6e3208;
+  --key-op-ink: #fff8f2;
+  --key-warn: #b04034;
+  --key-warn-edge: #5c2018;
+  --key-warn-ink: #fff5f3;
+  --key-eq: #0a0a0a;
+  --key-eq-edge: #000;
+  --key-eq-ink: #f5f3ef;
+  --key-shift: #3a6a96;
+  --key-shift-edge: #1a3550;
+  --key-shift-ink: #f2f7fc;
+  --calc-foot-ink: #b0ada8;
+}
+
+/* ----------------------------------------------------------- calc header */
+
+.calc-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding: 2px 4px 0;
+}
+
+.calc-badge {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.brand {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--calc-lcd-ink) 55%, var(--calc-shell-edge));
+}
+
+.brand-mark {
+  color: var(--warm);
+}
+
+.calc-badge-model {
+  flex: none;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.18em;
+  color: color-mix(in srgb, var(--calc-shell-edge) 70%, transparent);
+}
+
+.theme-btn {
+  flex: none;
+  height: 30px;
+  min-width: 52px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--calc-shell-edge) 70%, transparent);
+  background: color-mix(in srgb, var(--calc-shell-deep) 55%, transparent);
+  color: color-mix(in srgb, var(--calc-lcd-ink) 40%, var(--calc-shell-edge));
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.theme-btn:hover { border-color: var(--warm); color: var(--warm); }
+.theme-btn:active { transform: scale(.96); }
+
+/* ---------------------------------------------------------------- LCD */
+
+.readout {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  padding: 6px;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg,
+      var(--calc-lcd-frame) 0%,
+      color-mix(in srgb, var(--calc-lcd-frame) 70%, #000) 100%);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 22%, transparent),
+    0 3px 6px color-mix(in srgb, #000 28%, transparent) inset;
+}
+
+.readout-glass {
+  min-height: 136px;
+  padding: 12px 14px 14px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  color: var(--calc-lcd-ink);
+  background-image:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--calc-lcd) 88%, #fff) 0%,
+      var(--calc-lcd) 55%,
+      color-mix(in srgb, var(--calc-lcd) 82%, #000) 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      color-mix(in srgb, #000 4%, transparent) 2px,
+      color-mix(in srgb, #000 4%, transparent) 3px
+    );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #000 18%, transparent) inset,
+    0 8px 16px color-mix(in srgb, #000 12%, transparent) inset;
+}
+
+.readout-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 22px;
+  margin-bottom: 4px;
+}
+
+.angle-chip,
+.mem-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 3px;
+  border: none;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color: var(--calc-lcd-dim);
+  background: color-mix(in srgb, #000 8%, transparent);
+}
+
+.angle-chip[aria-pressed="true"],
+.mem-chip.is-second {
+  color: var(--calc-lcd-ink);
+  background: color-mix(in srgb, #000 14%, transparent);
+}
+
+.expr {
+  min-height: 1.15em;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--calc-lcd-dim);
+  word-break: break-all;
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
+.display {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(28px, 8vw, 40px);
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: right;
+  word-break: break-all;
+  letter-spacing: 0.01em;
+  color: var(--calc-lcd-ink);
+  text-shadow: 0 1px 0 color-mix(in srgb, #fff 18%, transparent);
+}
+
+.display.is-error { color: #6a1c14; }
+
+/* ---------------------------------------------------------------- keypad */
+
+.keypad {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(40px, 1fr));
+  gap: 4px;
+  min-height: 0;
+  padding: 0;
+}
+
+.key {
+  position: relative;
+  min-height: 40px;
+  height: 100%;
+  padding: 0;
+  border: 1px solid var(--key-digit-edge);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--key-digit) 92%, #fff) 0%,
+      var(--key-digit) 55%,
+      color-mix(in srgb, var(--key-digit) 88%, #000) 100%);
+  color: var(--key-digit-ink);
+  font-size: 23px;
+  font-weight: 700;
+  touch-action: manipulation;
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 28%, transparent),
+    inset 0 -3px 0 color-mix(in srgb, #000 32%, transparent);
+  transition: transform .06s ease, box-shadow .06s ease;
+}
+.key:hover {
+  filter: brightness(1.04);
+}
+.key:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #000 40%, transparent);
+}
+
+.key-fn {
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--key-fn-ink);
+  border-color: var(--key-fn-edge);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--key-fn) 88%, #fff) 0%,
+      var(--key-fn) 55%,
+      color-mix(in srgb, var(--key-fn) 82%, #000) 100%);
+}
+
+.key-op {
+  font-size: 25px;
+  color: var(--key-op-ink);
+  border-color: var(--key-op-edge);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--key-op) 88%, #fff) 0%,
+      var(--key-op) 55%,
+      color-mix(in srgb, var(--key-op) 80%, #000) 100%);
+}
+
+.key-warn {
+  color: var(--key-warn-ink);
+  border-color: var(--key-warn-edge);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--key-warn) 88%, #fff) 0%,
+      var(--key-warn) 55%,
+      color-mix(in srgb, var(--key-warn) 80%, #000) 100%);
+}
+
+.key-eq {
+  color: #1a0c04;
+  border-color: #8a3a08;
+  font-size: 30px;
+  font-weight: 800;
+  background:
+    linear-gradient(180deg, #ffc56a 0%, #f07a14 52%, #c45e12 100%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent),
+    inset 0 -3px 0 #8a3a08;
+}
+.key-eq:hover { filter: brightness(1.08); }
+.key-eq:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
+    inset 0 -1px 0 #8a3a08;
+}
+
+.key-shift {
+  color: var(--key-shift-ink);
+  border-color: var(--key-shift-edge);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--key-shift) 88%, #fff) 0%,
+      var(--key-shift) 55%,
+      color-mix(in srgb, var(--key-shift) 78%, #000) 100%);
+}
+.key-shift[aria-pressed="true"] {
+  color: var(--key-op-ink);
+  border-color: var(--key-op-edge);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--key-op) 88%, #fff) 0%,
+      var(--key-op) 55%,
+      color-mix(in srgb, var(--key-op) 80%, #000) 100%);
+}
+
+.key-zero { grid-column: span 1; }
+
+.k-main,
+.k-alt {
+  display: block;
+  text-align: center;
+}
+.k-alt {
+  display: none;
+  font-size: 13px;
+  opacity: .95;
+}
+
+body.is-second .k-main { display: none; }
+body.is-second .k-alt { display: block; }
+body.is-second .key:not(:has(.k-alt)) .k-main { display: block; }
+
+/* ----------------------------------------------------------- calc footer */
+
+.calc-foot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  margin: 0;
+  padding: 2px 4px 1px;
+  text-align: center;
+  color: var(--calc-foot-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.calc-foot p { margin: 0; }
+.calc-foot a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.calc-foot .heart { margin: 0 1px; }
+
+/* ---------------------------------------------------------------- sheet */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, #000 35%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+.scrim.open { opacity: 1; pointer-events: auto; }
+
+.sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 50;
+  width: min(480px, 100%);
+  transform: translate(-50%, 110%);
+  transition: transform .2s ease;
+  padding: 10px 16px calc(20px + env(safe-area-inset-bottom));
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.sheet.open { transform: translate(-50%, 0); }
+
+.sheet-handle {
+  width: 42px;
+  height: 4px;
+  margin: 2px auto 12px;
+  border-radius: 999px;
+  background: var(--border-strong);
+}
+
+.sheet h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.sheet .note {
+  margin: 10px 0 8px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+.theme-mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.theme-chip {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+.theme-chip[aria-checked="true"] {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 14px;
+}
+.btn:hover { background: var(--surface-2); }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 60;
+  max-width: calc(100vw - 32px);
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .toast { animation: rise .18s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translate(-50%, 8px); } }
+}
+
+/* Wider screens: handheld body still fills the column height */
+@media (min-width: 520px) {
+  .wrap {
+    padding: 12px;
+    min-height: 100dvh;
+  }
+  .calc {
+    border-radius: 28px;
+    border: 1px solid var(--calc-shell-edge);
+    box-shadow:
+      0 1px 0 color-mix(in srgb, #fff 55%, transparent) inset,
+      0 -2px 4px color-mix(in srgb, #000 12%, transparent) inset,
+      0 18px 36px color-mix(in srgb, #000 22%, transparent),
+      0 4px 10px color-mix(in srgb, #000 14%, transparent);
+  }
+}
+
+@media (max-height: 720px) {
+  .readout-glass { min-height: 112px; padding: 10px 12px 12px; }
+  .display { font-size: clamp(26px, 7vw, 36px); }
+  .calc { gap: 4px; padding: 6px 4px 2px; }
+  .key { border-radius: 8px; }
+}
+
+@media (max-width: 420px) {
+  .calc { padding: 6px 4px 2px; }
+}
