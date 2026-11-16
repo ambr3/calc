@@ -6,12 +6,11 @@
   <meta name="description" content="Scientific calculator on this device. Nothing is sent anywhere.">
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0a0a0a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Seclusa Calc">
-  <meta name="version" content="0.1.21">
+  <meta name="version" content="0.1.22">
 
   <!--
     Permissions-Policy in a <meta> tag is inert. Browsers only honour it as a
@@ -30,9 +29,9 @@
 
   <title>Seclusa Calc</title>
 
-  <script src="static/js/theme-boot.js?v=0.1.21"></script>
-  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.21">
-  <link rel="stylesheet" href="static/css/app.css?v=0.1.21">
+  <script src="static/js/theme-boot.js?v=0.1.22"></script>
+  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.22">
+  <link rel="stylesheet" href="static/css/app.css?v=0.1.22">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="static/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="static/icons/icon-192.png">
@@ -157,7 +156,7 @@
   <div class="theme-mode-row" role="radiogroup" aria-label="Colour mode">
     <button type="button" class="theme-chip" data-theme-opt="system" role="radio" aria-checked="false">System</button>
     <button type="button" class="theme-chip" data-theme-opt="light" role="radio" aria-checked="false">Light</button>
-    <button type="button" class="theme-chip" data-theme-opt="dark" role="radio" aria-checked="false">Dark</button>
+    <button type="button" class="theme-chip" data-theme-opt="dark" role="radio" aria-checked="true">Dark</button>
   </div>
   <p class="note">Orange ruled lines stay on. Solid colour skies are not used here.</p>
   <p class="note">On this device</p>
@@ -168,9 +167,9 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="static/js/store.js?v=0.1.21"></script>
-<script src="static/js/theme.js?v=0.1.21"></script>
-<script src="static/js/calc.js?v=0.1.21"></script>
-<script src="static/js/app.js?v=0.1.21"></script>
+<script src="static/js/store.js?v=0.1.22"></script>
+<script src="static/js/theme.js?v=0.1.22"></script>
+<script src="static/js/calc.js?v=0.1.22"></script>
+<script src="static/js/app.js?v=0.1.22"></script>
 </body>
 </html>
