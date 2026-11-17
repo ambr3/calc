@@ -6,7 +6,7 @@ and nothing you type is sent anywhere. Works offline once it has loaded.
 
 ## What it does
 
-- Version 0.1.30
+- Version 0.1.35
 - Arithmetic, parentheses, powers, roots, factorial, absolute value, sign, frac
 - `%` is Casio-style percent (`50%` → 0.5; `200×15%` → 30; `200+10%` → 220), not modulo
 - Trigonometry (sin / cos / tan / cot / sec / csc and inverses) with DEG / RAD / GRAD
@@ -29,6 +29,19 @@ it to your home screen, open your browser's menu and choose "Add to Home Screen"
 python3 -m http.server 8765 --bind 127.0.0.1
 # then open http://127.0.0.1:8765/
 ```
+
+### Keyboard
+
+| Keys | Action |
+|---|---|
+| `0`–`9` `.` | Digits |
+| `+` `-` `*` `/` `%` `^` | Operators (`*` → ×, `/` → ÷, `^` → xʸ) |
+| `(` `)` `!` | Grouping / factorial |
+| `Enter` or `=` | Evaluate |
+| `Backspace` | Delete last (`C`) |
+| `Delete` or `Escape` | All clear (`AC`) |
+| `p` | π |
+| `e` | e (ignored with Ctrl/Cmd/Alt) |
 
 ## Privacy
 

@@ -24,7 +24,7 @@
  *     they hard-reload: new hashes, old bytes.
  */
 
-const VERSION = "0.1.30";
+const VERSION = "0.1.35";
 const CACHE_PREFIX = "seclusa-calc-";
 const CACHE = `${CACHE_PREFIX}v${VERSION}`;
 

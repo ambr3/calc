@@ -84,7 +84,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   flex-direction: column;
   gap: 4px;
   min-height: 100%;
-  padding: 8px 6px 2px;
+  padding: 8px 6px 6px;
   border-radius: 0;
   background:
     linear-gradient(165deg,
@@ -196,6 +196,16 @@ html[data-theme="dark"] .calc {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+html[data-theme="dark"] .theme-btn {
+  border-color: color-mix(in srgb, var(--warm) 55%, #fff);
+  background: color-mix(in srgb, var(--warm) 18%, #2a2a2a);
+  color: #f5efe6;
+}
+html[data-theme="dark"] .theme-btn:hover {
+  border-color: var(--warm);
+  background: color-mix(in srgb, var(--warm) 28%, #2a2a2a);
+  color: var(--warm);
+}
 .theme-btn:hover { border-color: var(--warm); color: var(--warm); }
 .theme-btn:active { transform: scale(.96); }
 
@@ -278,10 +288,16 @@ html[data-theme="dark"] .calc {
   background: color-mix(in srgb, #000 8%, transparent);
 }
 
-.angle-chip[aria-pressed="true"],
-.mem-chip.is-second {
+.angle-chip[aria-pressed="true"] {
   color: var(--calc-lcd-ink);
   background: color-mix(in srgb, #000 14%, transparent);
+}
+
+/* Loud 2nd latch on the LCD — easy to spot when the pad has flipped. */
+.mem-chip.is-second {
+  color: #1a0c04;
+  background: color-mix(in srgb, var(--warm) 82%, #fff);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--warm) 55%, #000);
 }
 
 /*
@@ -469,13 +485,28 @@ html[data-theme="dark"] .calc {
 }
 .k-alt {
   display: none;
-  font-size: 13px;
-  opacity: .95;
+  /* Same size as the key’s primary label — 2nd layer must stay readable. */
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1.05;
+  opacity: 1;
+}
+
+.key-stack {
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.05;
+}
+.k-arrow {
+  display: block;
+  font-size: 0.9em;
+  line-height: 1;
 }
 
 body.is-second .k-main { display: none; }
 body.is-second .k-alt { display: block; }
 body.is-second .key:not(:has(.k-alt)) .k-main { display: block; }
+body.is-second .key-stack .k-main { display: block; }
 
 /* ----------------------------------------------------------- calc footer */
 
@@ -483,13 +514,20 @@ body.is-second .key:not(:has(.k-alt)) .k-main { display: block; }
   position: relative;
   z-index: 1;
   flex: none;
-  margin: 0;
-  padding: 2px 4px 1px;
+  margin: 2px 0 0;
+  padding: 8px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+  border-radius: 10px;
   text-align: center;
   color: var(--calc-foot-ink);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.02em;
+  /* Same plastic as the chassis, inset inside the bezel. */
+  background: var(--calc-shell);
+  border: 1px solid color-mix(in srgb, #000 20%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, #fff 14%, transparent) inset,
+    0 -1px 0 color-mix(in srgb, #000 16%, transparent) inset;
 }
 .calc-foot p { margin: 0; }
 .calc-foot a {
@@ -628,10 +666,10 @@ body.is-second .key:not(:has(.k-alt)) .k-main { display: block; }
     max-height: 112px;
     padding: 6px 10px 8px;
   }
-  .calc { gap: 4px; padding: 6px 4px 2px; }
+  .calc { gap: 4px; padding: 6px 4px 6px; }
   .key { border-radius: 8px; }
 }
 
 @media (max-width: 420px) {
-  .calc { padding: 6px 4px 2px; }
+  .calc { padding: 6px 4px 6px; }
 }

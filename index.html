@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Seclusa Calc">
-  <meta name="version" content="0.1.30">
+  <meta name="version" content="0.1.35">
 
   <!--
     Permissions-Policy in a <meta> tag is inert. Browsers only honour it as a
@@ -29,9 +29,9 @@
 
   <title>Seclusa Calc</title>
 
-  <script src="static/js/theme-boot.js?v=0.1.30"></script>
-  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.30">
-  <link rel="stylesheet" href="static/css/app.css?v=0.1.30">
+  <script src="static/js/theme-boot.js?v=0.1.35"></script>
+  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.35">
+  <link rel="stylesheet" href="static/css/app.css?v=0.1.35">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="static/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="static/icons/icon-192.png">
@@ -137,14 +137,14 @@
       <button type="button" class="key" data-key=".">.</button>
       <button type="button" class="key key-fn" data-key="EE">EE</button>
       <button type="button" class="key key-fn" data-key="rad">rad</button>
-      <button type="button" class="key key-fn" data-key="grad">→grad</button>
+      <button type="button" class="key key-fn key-stack" data-key="grad"><span class="k-arrow" aria-hidden="true">→</span><span class="k-main">grad</span></button>
       <button type="button" class="key key-fn" data-key="frac">frac</button>
     </div>
 
     <footer class="calc-foot">
       <p>
         <a href="LICENSE">GPL-3.0</a>
-        · <span id="app-version">v0.1.30</span>
+        · <span id="app-version">v0.1.35</span>
         · Made with <span class="heart" role="img" aria-label="love">❤️</span> 🇬🇧
       </p>
     </footer>
@@ -171,9 +171,9 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="static/js/store.js?v=0.1.30"></script>
-<script src="static/js/theme.js?v=0.1.30"></script>
-<script src="static/js/calc.js?v=0.1.30"></script>
-<script src="static/js/app.js?v=0.1.30"></script>
+<script src="static/js/store.js?v=0.1.35"></script>
+<script src="static/js/theme.js?v=0.1.35"></script>
+<script src="static/js/calc.js?v=0.1.35"></script>
+<script src="static/js/app.js?v=0.1.35"></script>
 </body>
 </html>
