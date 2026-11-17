@@ -660,7 +660,8 @@
     }
 
     if (k === "=") {
-      var result = evaluate(s.expression, { angleMode: s.angleMode, ans: s.ans });
+      var source = String(s.expression || "").replace(/=\s*$/, "");
+      var result = evaluate(source, { angleMode: s.angleMode, ans: s.ans });
       if (!result.ok) {
         s.display = "Error";
         s.error = true;
@@ -669,26 +670,22 @@
       }
       s.ans = result.value;
       s.display = result.display;
-      s.expression = result.display;
+      /* Keep the sum on the LCD: "1+2=" beside the answer. */
+      s.expression = clipExpr(source ? source + "=" : result.display + "=");
       s.justEvaluated = true;
       s.error = false;
       return s;
     }
 
     var continues = /^(?:\+|\-|×|\*|÷|\/|%|\^|!|\)|,)$/.test(k);
-    if ((s.justEvaluated || s.error) && !continues) {
-      s.expression = "";
-      s.error = false;
-      s.justEvaluated = false;
-    }
-
     var insert = k;
     if (k === "×") insert = "*";
     if (k === "÷") insert = "/";
     if (k === "π" || k === "pi") insert = "π";
     if (k === "φ" || k === "phi") insert = "φ";
     if (k === "EE" || k === "EXP") {
-      var tail = s.expression.charAt(s.expression.length - 1);
+      var bare = s.expression.replace(/=\s*$/, "");
+      var tail = bare.charAt(bare.length - 1);
       insert = /[0-9.]/.test(tail) ? "e" : "1e";
     }
     if (FN_KEYS[k]) {
@@ -700,7 +697,8 @@
     if (k === "x^y") insert = "^";
     if (k === "root") insert = "root(";
     if (k === "1/x") {
-      if (s.expression) setExpr("(1/(" + s.expression + "))");
+      if (s.justEvaluated && isFiniteNumber(s.ans)) setExpr("(1/(" + format(s.ans) + "))");
+      else if (s.expression) setExpr("(1/(" + s.expression.replace(/=\s*$/, "") + "))");
       else setExpr("(1/(");
       return s;
     }
@@ -714,11 +712,22 @@
           setExpr("-" + (s.expression || "0"));
         }
       } else {
-        setExpr("-(" + s.expression + ")");
+        setExpr("-(" + s.expression.replace(/=\s*$/, "") + ")");
       }
       return s;
     }
     if (k === "ans") insert = "ans";
+
+    /* After =, an operator continues from Ans; a new digit starts fresh. */
+    if (s.justEvaluated || s.error) {
+      if (continues && isFiniteNumber(s.ans) && !s.error) {
+        setExpr(format(s.ans) + insert);
+        return s;
+      }
+      s.expression = "";
+      s.error = false;
+      s.justEvaluated = false;
+    }
 
     setExpr(s.expression + insert);
     return s;

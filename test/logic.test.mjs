@@ -230,6 +230,13 @@ test("session key presses build and evaluate", () => {
   s = Calc.applyKey(s, "=");
   assert.equal(s.ans, 3);
   assert.equal(s.display, "3");
+  assert.equal(s.expression, "1+2=");
+  s = Calc.applyKey(s, "+");
+  assert.equal(s.expression, "3+");
+  s = Calc.applyKey(s, "4");
+  s = Calc.applyKey(s, "=");
+  assert.equal(s.ans, 7);
+  assert.equal(s.expression, "3+4=");
 });
 
 test("2nd layer remaps keys and DRG cycles three modes", () => {

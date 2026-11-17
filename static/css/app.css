@@ -217,13 +217,17 @@ html[data-theme="dark"] .calc {
 }
 
 .readout-glass {
+  height: 136px;
   min-height: 136px;
-  padding: 12px 14px 14px;
+  max-height: 136px;
+  padding: 8px 12px 10px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: 2px;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 4px;
+  overflow: hidden;
   color: var(--calc-lcd-ink);
   background-image:
     linear-gradient(180deg,
@@ -243,11 +247,17 @@ html[data-theme="dark"] .calc {
 }
 
 .readout-meta {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 6px;
-  min-height: 22px;
-  margin-bottom: 4px;
+  min-height: 20px;
+  margin: 0;
+}
+
+.copy-chip {
+  margin-left: auto;
+  cursor: pointer;
 }
 
 .angle-chip,
@@ -274,25 +284,56 @@ html[data-theme="dark"] .calc {
   background: color-mix(in srgb, #000 14%, transparent);
 }
 
-.expr {
-  min-height: 1.15em;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 12px;
-  color: var(--calc-lcd-dim);
-  word-break: break-all;
-  text-align: right;
-  letter-spacing: 0.02em;
-}
-
-.display {
+/*
+ * Text area under the chips: always room for exactly two rows.
+ * Expr + answer are one inline flow so wrap/scroll stays predictable.
+ * --lcd-row / font-size are set in app.js from the live box height.
+ */
+.readout-line {
+  --lcd-row: 40px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--calc-lcd-ink) 35%, transparent) transparent;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-variant-numeric: tabular-nums;
-  font-size: clamp(28px, 8vw, 40px);
+  font-size: calc(var(--lcd-row) * 0.8);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: var(--lcd-row);
   text-align: right;
-  word-break: break-all;
   letter-spacing: 0.01em;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.readout-line::-webkit-scrollbar {
+  width: 4px;
+}
+.readout-line::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--calc-lcd-ink) 35%, transparent);
+  border-radius: 4px;
+}
+.readout-line::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.expr {
+  display: inline;
+  margin: 0;
+  font: inherit;
+  color: var(--calc-lcd-dim);
+}
+
+.expr[hidden] { display: none !important; }
+
+.display {
+  display: inline;
+  margin: 0;
+  font: inherit;
   color: var(--calc-lcd-ink);
   text-shadow: 0 1px 0 color-mix(in srgb, #fff 18%, transparent);
 }
@@ -581,8 +622,12 @@ body.is-second .key:not(:has(.k-alt)) .k-main { display: block; }
 }
 
 @media (max-height: 720px) {
-  .readout-glass { min-height: 112px; padding: 10px 12px 12px; }
-  .display { font-size: clamp(26px, 7vw, 36px); }
+  .readout-glass {
+    height: 112px;
+    min-height: 112px;
+    max-height: 112px;
+    padding: 6px 10px 8px;
+  }
   .calc { gap: 4px; padding: 6px 4px 2px; }
   .key { border-radius: 8px; }
 }

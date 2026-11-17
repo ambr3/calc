@@ -39,6 +39,16 @@
     return window.Calc.normalizeSession(window.Store.getData());
   }
 
+  /** Size LCD type so exactly two rows fit the current glass, any device. */
+  function fitLcdType() {
+    var line = $("readout-line");
+    if (!line) return;
+    var h = line.clientHeight;
+    if (!(h > 0)) return;
+    var row = Math.max(16, Math.floor(h / 2));
+    line.style.setProperty("--lcd-row", row + "px");
+  }
+
   function paint() {
     var expr = $("expr");
     var display = $("display");
@@ -46,10 +56,22 @@
     var mem = $("mem-indicator");
     var second = $("second-indicator");
     var shiftBtn = document.querySelector('[data-key="2nd"]');
-    if (expr) expr.textContent = session.expression || "";
+    if (expr) {
+      var showExpr = !!session.justEvaluated && !session.error && !!session.expression;
+      expr.hidden = !showExpr;
+      /* Trailing space keeps dim expr and answer as one readable flow. */
+      expr.textContent = showExpr ? session.expression + "\u00a0" : "";
+    }
     if (display) {
       display.textContent = session.display || "0";
       display.classList.toggle("is-error", !!session.error);
+    }
+    fitLcdType();
+    var line = $("readout-line");
+    if (line && line.scrollHeight > line.clientHeight + 1) {
+      line.scrollTop = line.scrollHeight;
+    } else if (line) {
+      line.scrollTop = 0;
     }
     if (angle) {
       var modeLabel = session.angleMode === "rad" ? "RAD"
@@ -208,11 +230,55 @@
     wireTheme();
     wireKeys();
     paint();
+    window.addEventListener("resize", function () {
+      fitLcdType();
+    });
+
+    var verMeta = document.querySelector('meta[name="version"]');
+    var verSlot = $("app-version");
+    if (verMeta && verSlot) {
+      var ver = verMeta.getAttribute("content");
+      if (ver) verSlot.textContent = "v" + ver;
+    }
 
     var angleBtn = $("angle-mode");
     if (angleBtn) {
       angleBtn.addEventListener("click", function () {
         press("DRG");
+      });
+    }
+
+    var copyBtn = $("btn-copy");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", function () {
+        var text = session && session.error
+          ? ""
+          : (session && session.display ? String(session.display) : "");
+        if (!text || text === "Error") {
+          toast("Nothing to copy");
+          return;
+        }
+        var done = function () { toast("Copied answer"); };
+        var fail = function () { toast("Copy failed"); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(fail);
+          return;
+        }
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          if (ok) done();
+          else fail();
+        } catch (err) {
+          fail();
+        }
       });
     }
 

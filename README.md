@@ -6,7 +6,7 @@ and nothing you type is sent anywhere. Works offline once it has loaded.
 
 ## What it does
 
-- Version 0.1.22
+- Version 0.1.30
 - Arithmetic, parentheses, powers, roots, factorial, absolute value, sign, frac
 - `%` is Casio-style percent (`50%` → 0.5; `200×15%` → 30; `200+10%` → 220), not modulo
 - Trigonometry (sin / cos / tan / cot / sec / csc and inverses) with DEG / RAD / GRAD
@@ -16,6 +16,7 @@ and nothing you type is sent anywhere. Works offline once it has loaded.
 - Constants π, e, φ; rand; Ans; memory (MC / MR / M+ / M−)
 - **2nd** key for secondary functions on the same pad
 - Theme sheet: System / Light / Dark (orange ruled lines by default)
+- Copy answer from the LCD (stays on this device)
 - Clear saved data from the theme sheet
 
 ## Usage
