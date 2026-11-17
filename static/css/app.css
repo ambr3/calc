@@ -341,7 +341,9 @@ html[data-theme="dark"] .theme-btn:hover {
   display: inline;
   margin: 0;
   font: inherit;
-  color: var(--calc-lcd-dim);
+  /* Dulled after equals — answer stays full black ink. */
+  color: color-mix(in srgb, var(--calc-lcd-dim) 38%, var(--calc-lcd));
+  font-weight: 600;
 }
 
 .expr[hidden] { display: none !important; }

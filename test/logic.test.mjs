@@ -296,3 +296,18 @@ test("percent is Casio-style not modulo", () => {
   assert.ok(Math.abs(Calc.evaluate("50/200%").value - 25) < 1e-12);
   assert.ok(Math.abs(Calc.evaluate("2*3+10%").value - 6.6) < 1e-12);
 });
+
+test("multiply and divide keys keep ×÷ on the expression", () => {
+  let s = Calc.createSession();
+  s = Calc.applyKey(s, "4");
+  s = Calc.applyKey(s, "×");
+  s = Calc.applyKey(s, "5");
+  s = Calc.applyKey(s, "=");
+  assert.equal(s.ans, 20);
+  assert.equal(s.expression, "4×5=");
+  s = Calc.applyKey(s, "÷");
+  s = Calc.applyKey(s, "2");
+  s = Calc.applyKey(s, "=");
+  assert.equal(s.ans, 10);
+  assert.equal(s.expression, "20÷2=");
+});

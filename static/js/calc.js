@@ -679,8 +679,7 @@
 
     var continues = /^(?:\+|\-|×|\*|÷|\/|%|\^|!|\)|,)$/.test(k);
     var insert = k;
-    if (k === "×") insert = "*";
-    if (k === "÷") insert = "/";
+    /* Keep ×÷ on the LCD; tokenizer still accepts ASCII * /. */
     if (k === "π" || k === "pi") insert = "π";
     if (k === "φ" || k === "phi") insert = "φ";
     if (k === "EE" || k === "EXP") {

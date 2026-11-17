@@ -59,8 +59,8 @@
     if (expr) {
       var showExpr = !!session.justEvaluated && !session.error && !!session.expression;
       expr.hidden = !showExpr;
-      /* Trailing space keeps dim expr and answer as one readable flow. */
-      expr.textContent = showExpr ? session.expression + "\u00a0" : "";
+      /* Flush against the answer — colour, not a gap, separates the two. */
+      expr.textContent = showExpr ? session.expression : "";
     }
     if (display) {
       display.textContent = session.display || "0";

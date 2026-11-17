@@ -6,7 +6,7 @@ and nothing you type is sent anywhere. Works offline once it has loaded.
 
 ## What it does
 
-- Version 0.1.35
+- Version 0.1.36
 - Arithmetic, parentheses, powers, roots, factorial, absolute value, sign, frac
 - `%` is Casio-style percent (`50%` → 0.5; `200×15%` → 30; `200+10%` → 220), not modulo
 - Trigonometry (sin / cos / tan / cot / sec / csc and inverses) with DEG / RAD / GRAD
@@ -50,6 +50,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
   network calls. The service worker only downloads this app's own files so it
   can run offline.
 - Data stays in local storage on this device. Clear it from the theme sheet.
+- `_headers` / `.htaccess` harden hosts that honour them (frame deny, etc.).
+  GitHub Pages ignores those files; the page meta CSP still applies.
 
 ## License
 

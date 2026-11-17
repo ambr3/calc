@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Seclusa Calc">
-  <meta name="version" content="0.1.35">
+  <meta name="version" content="0.1.36">
 
   <!--
     Permissions-Policy in a <meta> tag is inert. Browsers only honour it as a
@@ -29,9 +29,9 @@
 
   <title>Seclusa Calc</title>
 
-  <script src="static/js/theme-boot.js?v=0.1.35"></script>
-  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.35">
-  <link rel="stylesheet" href="static/css/app.css?v=0.1.35">
+  <script src="static/js/theme-boot.js?v=0.1.36"></script>
+  <link rel="stylesheet" href="static/css/seclusa-base.css?v=0.1.36">
+  <link rel="stylesheet" href="static/css/app.css?v=0.1.36">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="static/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="static/icons/icon-192.png">
@@ -56,10 +56,7 @@
           <span class="mem-chip" id="mem-indicator" hidden>M</span>
           <button type="button" class="angle-chip copy-chip" id="btn-copy" title="Copy answer">Copy</button>
         </div>
-        <div class="readout-line" id="readout-line">
-          <div class="expr" id="expr" hidden></div>
-          <div class="display" id="display">0</div>
-        </div>
+        <div class="readout-line" id="readout-line"><span class="expr" id="expr" hidden></span><span class="display" id="display">0</span></div>
       </div>
     </div>
 
@@ -144,7 +141,7 @@
     <footer class="calc-foot">
       <p>
         <a href="LICENSE">GPL-3.0</a>
-        · <span id="app-version">v0.1.35</span>
+        · <span id="app-version">v0.1.36</span>
         · Made with <span class="heart" role="img" aria-label="love">❤️</span> 🇬🇧
       </p>
     </footer>
@@ -171,9 +168,9 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="static/js/store.js?v=0.1.35"></script>
-<script src="static/js/theme.js?v=0.1.35"></script>
-<script src="static/js/calc.js?v=0.1.35"></script>
-<script src="static/js/app.js?v=0.1.35"></script>
+<script src="static/js/store.js?v=0.1.36"></script>
+<script src="static/js/theme.js?v=0.1.36"></script>
+<script src="static/js/calc.js?v=0.1.36"></script>
+<script src="static/js/app.js?v=0.1.36"></script>
 </body>
 </html>
